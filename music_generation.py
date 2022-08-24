@@ -17,8 +17,8 @@ def job():
 
 
 def fill_queue():
-  with ThreadPoolExecutor(max_workers=4) as pool:
-    for x in range(4): 
+  with ThreadPoolExecutor(max_workers=3) as pool:
+    for x in range(3): 
       pool.submit(job)
 
 def ready_songs():
@@ -30,7 +30,7 @@ def ready_songs():
 try: 
   while True:
     num_songs = ready_songs()
-    if num_songs < 70:
+    if num_songs < 90:
       fill_queue()
     else: 
       print('Waiting: Queue at', num_songs, 'songs.')

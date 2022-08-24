@@ -51,7 +51,8 @@ try:
       if previous_song != None:
         sleep(120)
         previous_song.fade_to(0)
-        os.rename(previous_song.fname, used_path + previous_song.fname.split('/')[-1])
+        # os.rename(previous_song.fname, used_path + previous_song.fname.split('/')[-1])
+        os.remove(previous_song.fname)
       audio = Fader(song)
       audio.sound.play()
       print('Playing', song.split('/')[-1])
@@ -61,6 +62,7 @@ try:
         Fader.update()
       if previous_song != None: 
         previous_song.sound.stop()
+      audio.sound.set_volume(1)
       previous_song = audio
 except KeyboardInterrupt: 
   print('Done Playing!')
