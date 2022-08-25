@@ -1,3 +1,8 @@
+from datetime import date
+from youtube.youtube_api import get_vote_ratio
+from datetime import datetime, timedelta, timezone
+import shutil
+import asyncio
 import os
 from time import sleep 
 import pygame
@@ -5,6 +10,8 @@ import pygame
 dir_path = os.path.dirname(os.path.realpath(__file__))
 ready_path = '{}/ready_music/'.format(dir_path)
 used_path = '{}/used_music/'.format(dir_path)
+favourite_path = '{}/favourites/'.format(dir_path)
+learning_path = '{}/learning/'.format(dir_path)
 
 pygame.mixer.init()
 pygame.init()
@@ -42,6 +49,23 @@ class Fader(object):
       elif inst.next_vol < curr_volume:
         inst.sound.set_volume(curr_volume - inst.increment)
 
+async def count_votes(file_name):
+  end = datetime.now(timezone.utc)
+  start = end - timedelta(minutes=2)
+  print('Counting Votes for', file_name.split('/')[-1])
+  # try: 
+  voted_ratio, L_ratio = get_vote_ratio(start, end)
+  if voted_ratio > 0.25:
+    print('Favouriting', file_name.split('/')[-1])
+    shutil.copy2(file_name, favourite_path)
+  elif L_ratio > 0.25:
+    print('Learning', file_name.split('/')[-1])
+    shutil.copy2(file_name, learning_path)
+  # except: 
+  #   print('Failed to get ratio.')
+  
+  os.remove(previous_song.fname)
+
 try: 
   while True: 
     songs = load_available_songs()
@@ -51,8 +75,7 @@ try:
       if previous_song != None:
         sleep(120)
         previous_song.fade_to(0)
-        # os.rename(previous_song.fname, used_path + previous_song.fname.split('/')[-1])
-        os.remove(previous_song.fname)
+        asyncio.run(count_votes(previous_song.fname))
       audio = Fader(song)
       audio.sound.play()
       print('Playing', song.split('/')[-1])
@@ -64,5 +87,6 @@ try:
         previous_song.sound.stop()
       audio.sound.set_volume(1)
       previous_song = audio
+      asyncio.run(count_votes(previous_song.fname))
 except KeyboardInterrupt: 
   print('Done Playing!')

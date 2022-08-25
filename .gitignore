@@ -3,3 +3,4 @@
 *.tar.gz
 .DS_Store
 __pycache__
+youtube_keys.json
