@@ -53,16 +53,18 @@ async def count_votes(file_name):
   end = datetime.now(timezone.utc)
   start = end - timedelta(minutes=2)
   print('Counting Votes for', file_name.split('/')[-1])
-  # try: 
-  voted_ratio, L_ratio = get_vote_ratio(start, end)
-  if voted_ratio > 0.25:
-    print('Favouriting', file_name.split('/')[-1])
-    shutil.copy2(file_name, favourite_path)
-  elif L_ratio > 0.25:
-    print('Learning', file_name.split('/')[-1])
-    shutil.copy2(file_name, learning_path)
-  # except: 
-  #   print('Failed to get ratio.')
+  try: 
+    voted_ratio, L_ratio = get_vote_ratio(start, end)
+    print(voted_ratio)
+    print(L_ratio)
+    if voted_ratio > 0.25:
+      print('Favouriting', file_name.split('/')[-1])
+      shutil.copy2(file_name, favourite_path)
+    elif L_ratio > 0.25:
+      print('Learning', file_name.split('/')[-1])
+      shutil.copy2(file_name, learning_path)
+  except: 
+    print('Failed to get ratio.')
   
   os.remove(previous_song.fname)
 
@@ -87,6 +89,6 @@ try:
         previous_song.sound.stop()
       audio.sound.set_volume(1)
       previous_song = audio
-      asyncio.run(count_votes(previous_song.fname))
 except KeyboardInterrupt: 
   print('Done Playing!')
+  pygame.mixer.pause()

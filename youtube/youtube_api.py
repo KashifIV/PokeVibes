@@ -10,7 +10,6 @@ import googleapiclient.discovery
 import googleapiclient.errors
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-print('{}/youtube_keys.json'.format(dir_path))
 f = open('{}/youtube_keys.json'.format(dir_path))
 keys = json.load(f)
 
@@ -36,14 +35,13 @@ def get_vote_ratio(start_time, end_time):
   authors = set()
   voted_authors = set()
   L_authors = set()
-  print(response)
 
   while len(chats) != 0: 
     for chat in chats: 
       publish_time = parser.parse(chat['snippet']['publishedAt'])
 
       if publish_time.time()< start_time.time():
-        break 
+        continue
       
       if publish_time.time() < end_time.time():
         author = chat['snippet']['authorChannelId']
@@ -51,7 +49,7 @@ def get_vote_ratio(start_time, end_time):
           authors.add(author)
         if '!!!' in chat['snippet']['displayMessage'] and not author in voted_authors:
           voted_authors.add(author)
-        if 'LLL' in chat['snippet']['displayMessage'] and not author in voted_authors:
+        if 'LLL' in chat['snippet']['displayMessage'] and not author in L_authors:
           L_authors.add(author) 
 
     if response['pageInfo']['totalResults'] > 500:
@@ -60,7 +58,7 @@ def get_vote_ratio(start_time, end_time):
         liveChatId=CHAT_ID,
         part="snippet",
         pageToken=response['nextPageToken'],
-        maxResults = 500
+        maxResults = 500,
       )
       response = request.execute()
       chats = response['items']
