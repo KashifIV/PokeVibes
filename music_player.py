@@ -6,6 +6,7 @@ import asyncio
 import os
 from time import sleep 
 import pygame
+import pyautogui
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 ready_path = '{}/ready_music/'.format(dir_path)
@@ -60,9 +61,13 @@ async def count_votes(file_name):
     if voted_ratio > 0.25:
       print('Favouriting', file_name.split('/')[-1])
       shutil.copy2(file_name, favourite_path)
+      pyautogui.hotkey('f1')
     elif L_ratio > 0.25:
       print('Learning', file_name.split('/')[-1])
       shutil.copy2(file_name, learning_path)
+      pyautogui.hotkey('f3')
+    else: 
+      pyautogui.hotkey('f2')
   except: 
     print('Failed to get ratio.')
   
