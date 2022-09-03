@@ -74,7 +74,7 @@ async def count_votes(file_name):
   os.remove(previous_song.fname)
 
 try: 
-  while True: 
+  for _ in range(200): 
     songs = load_available_songs()
     print('Found', str(len(songs)), 'songs.')
     previous_song = None
