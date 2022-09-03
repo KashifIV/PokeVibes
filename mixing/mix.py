@@ -12,7 +12,7 @@ sound_file = os.path.join(dir_path, 'jummbox.sf2')
 
 def to_wav(path, output_path): 
   wav_command = [
-    'fluidsynth', sound_file, '-F','{}.wav'.format(output_path.split('.')[0]), path
+    'fluidsynth', sound_file, '-g 2', '-F','{}.wav'.format(output_path.split('.')[0]), path
   ]
   proc = subprocess.run(wav_command)
   return proc.stdout == 0
