@@ -35,6 +35,6 @@ try:
     else: 
       print('Waiting: Queue at', num_songs, 'songs.')
       sleep(1000)
-    dump_midi()
+    # dump_midi()
 except KeyboardInterrupt: 
   print('Stopping Music Generation')

@@ -61,10 +61,14 @@ async def count_votes(file_name):
     if voted_ratio > 0.25:
       print('Favouriting', file_name.split('/')[-1])
       shutil.copy2(file_name, favourite_path)
+      if file_name.split('.')[0] + '.mid' in os.listdir(ready_path):
+        shutil.copy2(file_name.split('.')[0] + '.mid', favourite_path)
       pyautogui.hotkey('f1')
     elif L_ratio > 0.25:
       print('Learning', file_name.split('/')[-1])
       shutil.copy2(file_name, learning_path)
+      if file_name.split('.')[0] + '.mid' in os.listdir(ready_path):
+        shutil.copy2(file_name.split('.')[0] + '.mid', learning_path)
       pyautogui.hotkey('f3')
     else: 
       pyautogui.hotkey('f2')
@@ -72,6 +76,8 @@ async def count_votes(file_name):
     print('Failed to get ratio.')
   
   os.remove(previous_song.fname)
+  if file_name.split('.')[0] + '.mid' in os.listdir(ready_path):
+    os.remove(file_name.split('.')[0] + '.mid')
 
 try: 
   while True: 

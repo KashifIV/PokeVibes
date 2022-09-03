@@ -7,7 +7,8 @@ import subprocess
 
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sound_file = os.path.join(dir_path, 'Pokemon_DPPt_GM_SoundfontFix.sf2')
+# sound_file = os.path.join(dir_path, 'Pokemon_DPPt_GM_SoundfontFix.sf2')
+sound_file = os.path.join(dir_path, 'jummbox.sf2')
 
 def to_wav(path, output_path): 
   wav_command = [
@@ -53,3 +54,4 @@ def mix(file_path, output_dir):
   if not is_sticky(path): 
     to_wav(path, output_dir + file_path.split('/')[-1])
   os.remove(path)
+  os.rename(file_path, output_dir + file_path.split('/')[-1])
