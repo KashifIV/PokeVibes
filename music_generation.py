@@ -24,7 +24,8 @@ def fill_queue():
 def ready_songs():
   count = 0
   for item in os.listdir('{}/ready_music/'.format(dir_path)):
-    count += 1
+    if '.wav' in item:
+      count += 1
   return count 
 
 try: 
@@ -32,6 +33,7 @@ try:
     num_songs = ready_songs()
     if num_songs < 90:
       fill_queue()
+      break
     else: 
       print('Waiting: Queue at', num_songs, 'songs.')
       sleep(1000)
